@@ -20,8 +20,6 @@ import com.web.service.EmployeeService;
 
 
 @RestController
-//@RequestMapping("/book")
-//@EnableJpaRepositories(repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean.class)
 public class EmployeeController {
 
 	@Autowired
