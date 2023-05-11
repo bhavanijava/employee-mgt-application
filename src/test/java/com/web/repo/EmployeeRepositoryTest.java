@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeServiceImp;
 
@@ -57,7 +58,7 @@ class EmployeeRepositoryTest {
 
     // This test checks whether an employee can be successfully retrieved by its ID.
     @Test
-    void testGetOne() {
+    void testGetOne() throws EmployeeNotFoundException {
         Employee emp = new Employee(1, "John", 1000.00, "London");
         when(repo.findById(1)).thenReturn(Optional.of(emp));
         Employee foundEmp = service.getOne(1);

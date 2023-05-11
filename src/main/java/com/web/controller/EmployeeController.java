@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.exception.EmployeeNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeService;
 
@@ -26,9 +27,9 @@ public class EmployeeController {
 	private EmployeeService service;
 	
 	@PostMapping("/employee")
-	public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+	public Employee createEmployee(@Valid @RequestBody Employee employee) {
 	    Employee savedEmployee = service.save(employee);
-	    return ResponseEntity.ok(savedEmployee);
+	    return savedEmployee;
 	}
 
 
@@ -53,7 +54,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("findOne/{id}")
-	public Employee findOne(@PathVariable Integer id)
+	public Employee findOne(@PathVariable Integer id) throws EmployeeNotFoundException
 	{
 		return service.getOne(id);
 	}

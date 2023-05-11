@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeNotFoundException;
 import com.web.model.Employee;
 import com.web.repo.EmployeeRepo;
 
@@ -58,7 +59,7 @@ public class EmployeeServiceTest {
 	
 	
 	@Test
-	public void getOneTest() {
+	public void getOneTest() throws EmployeeNotFoundException {
 	    int id = 1;
 	    Employee employee = new Employee(id, "John", 10000.00, "hyd");
 	    when(repo.findById(id)).thenReturn(Optional.of(employee));

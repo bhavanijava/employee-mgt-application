@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.web.exception.EmployeeNotFoundException;
 import com.web.model.Employee;
 import com.web.repo.EmployeeRepo;
 
@@ -27,9 +28,15 @@ public class EmployeeServiceImp implements EmployeeService {
 	}
 
 	@Override
-	public Employee getOne(Integer id) {
-		return repo.findById(id).get();
+	public Employee getOne(Integer id) throws EmployeeNotFoundException {
+	    Optional<Employee> optionalEmployee = repo.findById(id);
+	    if (optionalEmployee.isPresent()) {
+	        return optionalEmployee.get();
+	    } else {
+	        throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+	    }
 	}
+
 
 	@Override
 	public void delete(Integer id) {

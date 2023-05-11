@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeService;
 
@@ -45,7 +46,7 @@ public class EmployeeControllerTest {
     }
     
     @Test
-    public void testFindOne() {
+    public void testFindOne() throws EmployeeNotFoundException {
         // create an employee to be returned by the service
         Employee employee = new Employee(1, "John", 5000.00, "New York");
         // mock the service to return the employee
@@ -81,7 +82,7 @@ public class EmployeeControllerTest {
         // mock the service to return the saved employee
         when(service.save(employee)).thenReturn(employee);
         // call the controller method
-        Employee result = controller.save(employee);
+        Employee result = controller.createEmployee(employee);
         // assert that the result matches the expected employee
         assertEquals(employee, result);
     }
