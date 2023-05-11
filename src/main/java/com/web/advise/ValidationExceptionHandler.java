@@ -15,6 +15,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.web.exception.EmployeeAlreadyExit;
+import com.web.exception.EmployeeNotFoundException;
+import com.web.exception.EmployeesNotFoundException;
+
 @RestControllerAdvice
 public class ValidationExceptionHandler {
 
@@ -46,10 +50,30 @@ public class ValidationExceptionHandler {
 	}
 	
 
+    @ExceptionHandler(EmployeeNotFoundException.class)
+   	public Map<String,String> handleEmployeeNotFoundException(EmployeeNotFoundException ex)
+   	{
+   		Map<String,String> errorMap=new HashMap<>();
+   		errorMap.put("errorMessage", ex.getMessage());
+   		return errorMap;
+   	} 
+    
+    
+    @ExceptionHandler(EmployeesNotFoundException.class)
+	public Map<String,String> handleEmployeesNotFoundException(EmployeesNotFoundException ex)
+	{
+		Map<String,String> errorMap=new HashMap<>();
+		errorMap.put("errorMessage", ex.getMessage());
+		return errorMap;
+	}
 
 
-
-
-
+    @ExceptionHandler(EmployeeAlreadyExit.class)
+   	public Map<String,String> handleEmployeeAlreadyExit(EmployeeAlreadyExit ex)
+   	{
+   		Map<String,String> errorMap=new HashMap<>();
+   		errorMap.put("errorMessage", ex.getMessage());
+   		return errorMap;
+   	}
 
 }

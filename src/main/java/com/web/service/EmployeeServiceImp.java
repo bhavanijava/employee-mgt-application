@@ -7,7 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.web.exception.EmployeeAlreadyExit;
 import com.web.exception.EmployeeNotFoundException;
+import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.repo.EmployeeRepo;
 
@@ -18,14 +20,24 @@ public class EmployeeServiceImp implements EmployeeService {
 	private EmployeeRepo repo;
 
 	@Override
-	public Employee save(Employee e) {
-		return repo.save(e);
+	public Employee save(Employee e) throws EmployeeAlreadyExit {
+	    Optional<Employee> optionalEmployee = repo.findById(e.getId());
+	    if (optionalEmployee.isPresent()) {
+	        throw new EmployeeAlreadyExit("Employee with ID " + e.getId() + " already exists!");
+	    }
+	    return repo.save(e);
 	}
 
+
 	@Override
-	public List<Employee> findAll() {
-		return repo.findAll();
+	public List<Employee> findAll() throws EmployeesNotFoundException {
+	    List<Employee> employees = repo.findAll();
+	    if (employees.isEmpty()) {
+	        throw new EmployeesNotFoundException("No employees found");
+	    }
+	    return employees;
 	}
+
 
 	@Override
 	public Employee getOne(Integer id) throws EmployeeNotFoundException {
@@ -39,9 +51,16 @@ public class EmployeeServiceImp implements EmployeeService {
 
 
 	@Override
-	public void delete(Integer id) {
-		repo.deleteById(id);
+	public String delete(Integer id) throws EmployeeNotFoundException {
+	    Optional<Employee> optionalEmployee = repo.findById(id);
+	    if (optionalEmployee.isPresent()) {
+	        repo.deleteById(id);
+	        return "Employee with id " + id + " has been successfully deleted.";
+	    } else {
+	        throw new EmployeeNotFoundException("Employee with id " + id + " not found and try again to delete.");
+	    }
 	}
+
 
 	@Override
 	public Employee updateEmp(Employee employee, Integer id) {

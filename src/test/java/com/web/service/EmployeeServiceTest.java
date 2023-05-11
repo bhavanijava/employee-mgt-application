@@ -24,7 +24,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeAlreadyExit;
 import com.web.exception.EmployeeNotFoundException;
+import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.repo.EmployeeRepo;
 
@@ -44,7 +46,7 @@ public class EmployeeServiceTest {
 	
 	
 	@Test
-	public void findAllTest() {
+	public void findAllTest() throws EmployeesNotFoundException {
 		  List<Employee> employees = Arrays.asList(
 		            new Employee(1, "John", 5000.00, "New York"),
 		            new Employee(2, "Jane", 6000.00, "Los Angeles")
@@ -73,7 +75,7 @@ public class EmployeeServiceTest {
 	
 	
 	@Test
-	public void deleteTest() {
+	public void deleteTest() throws EmployeeNotFoundException {
 		int id=999;
 		@SuppressWarnings("unused")
 		Employee emp = new Employee(id, "Pranya", 33.00, "Pune");
@@ -83,7 +85,7 @@ public class EmployeeServiceTest {
 	
 	//positive 
 	@Test
-	public void saveUserTest() {
+	public void saveUserTest() throws EmployeeAlreadyExit {
 		Employee emp = new Employee(999, "bhavani", 200.00, "Pune");
 		when(repo.save(emp)).thenReturn(emp);
 		assertEquals(emp, service.save(emp));

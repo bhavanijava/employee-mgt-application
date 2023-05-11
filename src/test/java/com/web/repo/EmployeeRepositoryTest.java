@@ -17,7 +17,9 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeAlreadyExit;
 import com.web.exception.EmployeeNotFoundException;
+import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeServiceImp;
 
@@ -38,7 +40,7 @@ class EmployeeRepositoryTest {
 
     // This test checks whether an employee can be successfully saved.
     @Test
-    void testSave() {
+    void testSave() throws EmployeeAlreadyExit {
         Employee emp = new Employee(1, "John", 1000.00, "London");
         when(repo.save(emp)).thenReturn(emp);
         Employee savedEmp = service.save(emp);
@@ -48,7 +50,7 @@ class EmployeeRepositoryTest {
 
     // This test checks whether all employees can be successfully retrieved.
     @Test
-    void testFindAll() {
+    void testFindAll() throws EmployeesNotFoundException {
         when(repo.findAll()).thenReturn(List.of(new Employee(1, "John", 1000.00, "London"),
                 new Employee(2, "Mary", 2000.00, "New York")));
         List<Employee> empList = service.findAll();
@@ -68,7 +70,7 @@ class EmployeeRepositoryTest {
 
     // This test checks whether an employee can be successfully deleted.
     @Test
-    void testDelete() {
+    void testDelete() throws EmployeeNotFoundException {
         Mockito.doNothing().when(repo).deleteById(1);
         service.delete(1);
         assertTrue(true); // no exception thrown

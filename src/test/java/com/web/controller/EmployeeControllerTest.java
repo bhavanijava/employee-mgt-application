@@ -16,7 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.web.exception.EmployeeAlreadyExit;
 import com.web.exception.EmployeeNotFoundException;
+import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeService;
 
@@ -31,7 +33,7 @@ public class EmployeeControllerTest {
     private EmployeeService service;
 
     @Test
-    public void testFindAllEmps() {
+    public void testFindAllEmps() throws EmployeesNotFoundException {
         // create a list of employees to be returned by the service
         List<Employee> employees = Arrays.asList(
             new Employee(1, "John", 5000.00, "New York"),
@@ -62,9 +64,10 @@ public class EmployeeControllerTest {
 
     This method tests the deleteEmployee method of the EmployeeController by verifying
     that the delete method of the EmployeeService is called with the correct employee ID.
+     * @throws EmployeeNotFoundException 
     */
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws EmployeeNotFoundException {
     // set up test data
     int id = 999;
     // call the method being tested
@@ -76,7 +79,7 @@ public class EmployeeControllerTest {
     
     
     @Test
-    public void testSaveEmployee() {
+    public void testSaveEmployee() throws EmployeeAlreadyExit {
         // create a new employee to be saved
         Employee employee = new Employee(1, "John", 5000.00, "New York");
         // mock the service to return the saved employee
