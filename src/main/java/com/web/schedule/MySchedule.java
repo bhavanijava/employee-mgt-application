@@ -2,8 +2,8 @@ package com.web.schedule;
 
 import java.time.LocalDateTime;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.web.exception.EmployeeAlreadyExit;
@@ -25,20 +25,20 @@ public class MySchedule {
         this.employeeService = employeeService;
     }
 
-    @Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(1) }")
+   // @Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(1) }")
     public void task1() {
         LocalDateTime dt = LocalDateTime.now();
         System.out.println("Cron Expression 1: " + dt);
     }
 
-    @Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(3) }")
+    //@Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(3) }")
     public void task2() throws EmployeesNotFoundException {
         LocalDateTime dt = LocalDateTime.now();
         var employees=employeeService.findAll();
         System.out.println("Employees: " + employees + " " + dt);
     }
     
-    @Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(2) }")
+    //@Scheduled(cron="#{ @scheduleTimingsRepo.findCronExpressionById(2) }")
     public void task3() throws EmployeesNotFoundException, EmployeeAlreadyExit {
         LocalDateTime dt = LocalDateTime.now();
 		Employee emp = new Employee(999, "bhavani", 200.00, "Pune");

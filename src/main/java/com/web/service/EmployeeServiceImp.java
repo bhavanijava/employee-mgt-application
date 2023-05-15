@@ -13,52 +13,67 @@ import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.repo.EmployeeRepo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class EmployeeServiceImp implements EmployeeService {
-	
+
 	@Autowired
 	private EmployeeRepo repo;
 
 	@Override
 	public Employee save(Employee e) throws EmployeeAlreadyExit {
-	    Optional<Employee> optionalEmployee = repo.findById(e.getId());
-	    if (optionalEmployee.isPresent()) {
-	        throw new EmployeeAlreadyExit("Employee with ID " + e.getId() + " already exists!");
-	    }
-	    return repo.save(e);
+		Optional<Employee> optionalEmployee = repo.findById(e.getId());
+		if (optionalEmployee.isPresent()) {
+			throw new EmployeeAlreadyExit("Employee with ID " + e.getId() + " already exists!");
+		}
+		return repo.save(e);
 	}
 
 
 	@Override
 	public List<Employee> findAll() throws EmployeesNotFoundException {
-	    List<Employee> employees = repo.findAll();
-	    if (employees.isEmpty()) {
-	        throw new EmployeesNotFoundException("No employees found");
-	    }
-	    return employees;
+		List<Employee> employees = repo.findAll();
+		if (employees.isEmpty()) {
+			throw new EmployeesNotFoundException("No employees found");
+		}
+		return employees;
 	}
-
 
 	@Override
 	public Employee getOne(Integer id) throws EmployeeNotFoundException {
-	    Optional<Employee> optionalEmployee = repo.findById(id);
-	    if (optionalEmployee.isPresent()) {
-	        return optionalEmployee.get();
-	    } else {
-	        throw new EmployeeNotFoundException("Employee with id " + id + " not found");
-	    }
+		try {
+			log.info("EmployeeServiceIMp : getOne execution started.");
+			Optional<Employee> optionalEmployee = repo.findById(id);
+			if (optionalEmployee.isPresent()) {
+				Employee employee = optionalEmployee.get();
+				log.debug("EmployeeServiceIMP : getOne retrieving employee from database for id {} {}",  id, employee);
+				return employee;
+			} else {
+				throw new EmployeeNotFoundException("Employee with id " + id + " not found");
+			}
+		} catch (EmployeeNotFoundException e) {
+			log.error("EmployeeServiceIMp : getOne Exception occurred: {}", e.getMessage());
+			throw e; // re-throw the exception after logging the error message
+		}
+		finally {
+			log.info("EmployeeServiceIMP : getOne execution ended.");
+		}
 	}
+
+
 
 
 	@Override
 	public String delete(Integer id) throws EmployeeNotFoundException {
-	    Optional<Employee> optionalEmployee = repo.findById(id);
-	    if (optionalEmployee.isPresent()) {
-	        repo.deleteById(id);
-	        return "Employee with id " + id + " has been successfully deleted.";
-	    } else {
-	        throw new EmployeeNotFoundException("Employee with id " + id + " not found and try again to delete.");
-	    }
+		Optional<Employee> optionalEmployee = repo.findById(id);
+		if (optionalEmployee.isPresent()) {
+			repo.deleteById(id);
+			return "Employee with id " + id + " has been successfully deleted.";
+		} else {
+			throw new EmployeeNotFoundException("Employee with id " + id + " not found and try again to delete.");
+		}
 	}
 
 

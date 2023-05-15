@@ -21,8 +21,11 @@ import com.web.exception.EmployeesNotFoundException;
 import com.web.model.Employee;
 import com.web.service.EmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
+@Slf4j
 public class EmployeeController {
 
 	@Autowired
@@ -56,10 +59,13 @@ public class EmployeeController {
 	}
 	
 	@GetMapping("findOne/{id}")
-	public Employee findOne(@PathVariable Integer id) throws EmployeeNotFoundException
-	{
-		return service.getOne(id);
+	public Employee findOne(@PathVariable Integer id) throws EmployeeNotFoundException {
+		log.info("EmployeeController: findOne request body {}", id);
+        Employee employee = service.getOne(id);
+        log.info("EmployeeController: findOne response body {}", employee);
+        return employee;
 	}
+
 	
 	@DeleteMapping("/employee/{id}")
 	public String deleteEmployee(@PathVariable Integer id) throws EmployeeNotFoundException {
